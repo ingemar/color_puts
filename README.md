@@ -7,7 +7,7 @@ Color your output with inline color codes.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'color_puts'
+gem "color_puts"
 ```
 
 ## Usage
@@ -15,9 +15,9 @@ gem 'color_puts'
 Example:
 
 ```ruby
-  include ColorPuts
+include ColorPuts
 
-  cputs "There was a %green{field} and %blue{sky}."
+colorize "There was a %green{field} and %blue{sky}."
 ```
 
 ## Colors
@@ -25,26 +25,24 @@ Example:
 List of colors names:
 
 ```
-  black
-  dblue
-  dgreen
-  dcyan
-  dred
-  dpurple
-  dgray
-  brown
-  gray
-  blue
-  green
-  cyan
-  red
-  purple
-  yellow
-  white
+black
+dblue
+dgreen
+dcyan
+dred
+dpurple
+dgray
+brown
+gray
+blue
+green
+cyan
+red
+purple
+yellow
+white
 ```
-
 
 ## Contributing
 
 Contributions are welcome!
-
