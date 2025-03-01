@@ -1,44 +1,47 @@
 # frozen_string_literal: true
 
-module ColorPuts
-  COLORS = {
-    "black" => "0;30",
-    "dblue" => "0;34",
-    "dgreen" => "0;32",
-    "dcyan" => "0;36",
-    "dred" => "0;31",
-    "dpurple" => "0;35",
-    "dgray" => "1;30",
-    "brown" => "0;33",
-    "gray" => "0;37",
-    "blue" => "1;34",
-    "green" => "1;32",
-    "cyan" => "1;36",
-    "red" => "1;31",
-    "purple" => "1;35",
-    "yellow" => "1;33",
-    "white" => "1;37"
-  }.freeze
+require "sai"
 
-  REGEXP = /%(#{COLORS.keys.join("|")})\{([^}]*)\}/
+module ColorPuts
+  REGEXP = /\((\w+|#[0-9A-Fa-f]{6})\)\[([^\]]+)\]/
   private_constant :REGEXP
 
-  TEMPLATE = "\e[%<color>sm%<text>s\e[0;39m"
-  private_constant :TEMPLATE
+  RAINBOW = 20
+  private_constant :RAINBOW
+
+  DECORATOR = Sai::Decorator.new(mode: Sai.mode.auto)
+  private_constant :DECORATOR
+
+  class NullDecorator
+    def self.decorate(string) = string
+  end
 
   # Example:
   #
-  #  colorize("There was a %green{field} and %blue{sky}.")
+  #  colorize("There was a (green)[field] and (blue)[sky].")
   #
-  def colorize(string)
+  def self.colorize(string, decorator: DECORATOR)
+    Sai::Registry.send(:lookup).keys
+    Sai::ANSI::STYLES.keys
+
     string
       .dup
-      .gsub(REGEXP) do |match|
-        color, text = match.match(REGEXP).captures
+      .gsub(REGEXP) do |markdown|
+        color, text = markdown.scan(REGEXP)[0]
 
-        TEMPLATE % {color: COLORS[color], text:}
+        if color.start_with?("#") then decorator.hex(color)
+        elsif color == "rainbow" then decorator.rainbow(RAINBOW)
+        elsif Sai::ANSI::STYLES.key?(color.to_sym) then decorator.public_send(color)
+        elsif Sai::Registry.send(:lookup).key?(color.sub(/\Aon_/, "").to_sym) then decorator.public_send(color)
+        else
+          NullDecorator
+        end
+          .decorate(text)
+          .to_s
       end
   end
 
-  def cputs(string = "") = puts colorize(string)
+  def colorize(...)
+    ColorPuts.colorize(...)
+  end
 end
