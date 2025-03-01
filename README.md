@@ -1,47 +1,24 @@
 # ColorPuts
-
-Color your output with inline color codes.
+Colorize your output with markdown inspired syntax
 
 ## Installation
-
-Add this line to your application's Gemfile:
-
+With Bundler:
 ```ruby
 gem "color_puts"
 ```
 
 ## Usage
-
 Example:
-
 ```ruby
-include ColorPuts
-
-colorize "There was a %green{field} and %blue{sky}."
+ColorPuts.colorize(<<~TEXT)
+  A (bold)[bold], (bright_red)[bright red boat] with an (#FF8000)[orange sail] was
+  sailing (on_blue)[on a blue sea] with (rainbow)[a rainbow in the background].
+TEXT
 ```
 
 ## Colors
-
-List of colors names:
-
-```
-black
-dblue
-dgreen
-dcyan
-dred
-dpurple
-dgray
-brown
-gray
-blue
-green
-cyan
-red
-purple
-yellow
-white
-```
+The colorization is done with [Sai](https://github.com/aaronmallen/sai),
+so you can use any style it supports or any color name in its registry.
 
 ## Contributing
 
